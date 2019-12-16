@@ -9,7 +9,7 @@ I'm not an expertise bot developer, so could the *guru* excuses me in case of mi
 
 This repo is diveded into some incremental levels, from 0 to 5. 
 I prefer to create a initial *requirements.txt* instead add record based on the current level, 
-so the first thing you have to do is install all the dependencies. 
+so you have to do install all the dependencies only the first time. 
 
 ```bash
 pip install -r requirments.txt
