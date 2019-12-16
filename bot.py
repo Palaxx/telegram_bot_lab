@@ -1,9 +1,8 @@
 import os
 from telepot import Bot
-from telepot.loop import MessageLoop
 import time
 
-# Load the file env from default localtion
+# Load the file env from default location
 from dotenv import load_dotenv
 load_dotenv(verbose=True)
 
@@ -14,15 +13,18 @@ print(bot.getMe())
 
 # Handle message received
 def on_chat_message(msg):
-    pass
+    print(msg)
 
 
 # Starting message loop
-# MessageLoop(bot, on_chat_message).run_as_thread()
-
-# Blocking loop MessageLoop(bot, on_chat_message).run_forever()
 print ('Listening ...')
+last_update_id = None
 while 1:
-    # message = bot.getUpdates()
-    # print(message)
+    messages = bot.getUpdates(last_update_id)
+
+    print("Received {} messages".format(len(messages)))
+    for message in messages:
+        on_chat_message(message)
+        last_update_id = message.get('update_id') + 1
+
     time.sleep(10)
