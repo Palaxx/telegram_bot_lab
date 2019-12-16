@@ -1,7 +1,7 @@
 #ide
 .idea
 
-# Byte-compiled / optimized / DLL files
+# Bypyp te-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
