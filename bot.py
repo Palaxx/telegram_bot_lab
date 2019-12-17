@@ -15,8 +15,24 @@ print(bot.getMe())
 
 # Handle message received
 def on_chat_message(msg):
+    print(msg)
+    text = msg.get('text')
+
+    parameters = get_command_parameters(text)
     content_type, chat_type, chat_id = telepot.glance(msg)
-    bot.sendMessage(chat_id, "Hi {}, nice to meet you!".format(msg.get('from').get('first_name')))
+    if '/greetings' in text:
+        bot.sendMessage(chat_id, "Hi {}, nice to meet you!".format(msg.get('from').get('first_name')))
+    elif '/sayhelloto' in text:
+        name = '' if len(parameters) == 0 else parameters[0]
+        bot.sendMessage(chat_id, "Hi {}, nice to meet you!".format(name))
+    elif text.startswith('/'):
+        bot.sendMessage(chat_id, "I'm sorry {} can't understand!".format(msg.get('from').get('first_name')))
+
+
+def get_command_parameters(text:str) -> list:
+    parameters = text.split()
+    return parameters[1::]
+
 
 
 # Starting message loop
