@@ -2,7 +2,7 @@ import os
 import telepot
 from telepot import Bot
 from telepot.loop import MessageLoop
-from telepot.namedtuple import ReplyKeyboardMarkup, KeyboardButton
+from telepot.namedtuple import ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove
 import time
 
 # Load the file env from default location
@@ -27,20 +27,24 @@ def on_chat_message(msg):
         name = '' if len(parameters) == 0 else parameters[0]
         bot.sendMessage(chat_id, "Hi *{}*, nice to meet you!".format(name), parse_mode='Markdown')
     elif '/sendphoto' in text:
+        # Using a random photo generator the satisfy the request
         category = '' if len(parameters) == 0 else parameters[0]
         bot.sendPhoto(chat_id, 'https://source.unsplash.com/featured/?{}'.format(category),
                       caption='Your <b>{}</b> photo is arrived'.format(category),
                       parse_mode='HTML'
                       )
-    elif '/keyboard' in text:
-        button1 = KeyboardButton(text="Yes")
-        button2 = KeyboardButton(text="No")
-        button3 = KeyboardButton(text="Don't know")
-        keyboard = ReplyKeyboardMarkup(Keyboard=[
-            [button1, button2, button3]
-        ])
+    elif '/openkeyboard' in text:
+        button1 = KeyboardButton(text="Choice 1")
+        button2 = KeyboardButton(text="Choice 2")
+        button3 = KeyboardButton(text="Choice 3")
+        keyboard = ReplyKeyboardMarkup(keyboard=[
+            [button1, button2],
+            [button3]
+        ],  one_time_keyboard=True)
 
-        bot.sendMessage(chat_id, 'This is a custom keyboard', reply_markup=keyboard)
+        bot.sendMessage(chat_id, 'Make your choice', reply_markup=keyboard)
+    elif '/closekeyboard' in text:
+        bot.sendMessage(chat_id, 'Closing keyboard', reply_markup=ReplyKeyboardRemove(remove_keyboard=True))
     elif text.startswith('/'):
         bot.sendMessage(chat_id, "I'm sorry {} can't understand!".format(msg.get('from').get('first_name')))
 
