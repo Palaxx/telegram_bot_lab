@@ -1,5 +1,7 @@
 import os
 import telepot
+import schedule
+
 from telepot import Bot
 from telepot.loop import MessageLoop
 from telepot.namedtuple import ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove
@@ -45,6 +47,12 @@ def on_chat_message(msg):
         bot.sendMessage(chat_id, 'Make your choice', reply_markup=keyboard)
     elif '/closekeyboard' in text:
         bot.sendMessage(chat_id, 'Closing keyboard', reply_markup=ReplyKeyboardRemove(remove_keyboard=True))
+    elif '/register' in text:
+        bot.sendMessage(chat_id, 'Waiting approval from admin...')
+        bot.sendMessage(os.getenv('MY_CHAT_ID'), 'User {}{}, with chat id {} registers on bot'.format(
+            msg.get('from').get('first_name'),
+            msg.get('from').get('last_name'),
+            chat_id))
     elif text.startswith('/'):
         bot.sendMessage(chat_id, "I'm sorry {} can't understand!".format(msg.get('from').get('first_name')))
 
