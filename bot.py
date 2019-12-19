@@ -47,12 +47,12 @@ def on_chat_message(msg):
         bot.sendMessage(chat_id, 'Make your choice', reply_markup=keyboard)
     elif '/closekeyboard' in text:
         bot.sendMessage(chat_id, 'Closing keyboard', reply_markup=ReplyKeyboardRemove(remove_keyboard=True))
-    elif '/register' in text:
-        bot.sendMessage(chat_id, 'Waiting approval from admin...')
-        bot.sendMessage(os.getenv('MY_CHAT_ID'), 'User {}{}, with chat id {} registers on bot'.format(
-            msg.get('from').get('first_name'),
-            msg.get('from').get('last_name'),
-            chat_id))
+    elif '/sendcustommessage' in text:
+        message = 'Hi common user!'
+        if chat_id == int(os.getenv('MY_CHAT_ID')):
+            message = 'Hi Master!'
+        bot.sendMessage(chat_id, message)
+
     elif text.startswith('/'):
         bot.sendMessage(chat_id, "I'm sorry {} can't understand!".format(msg.get('from').get('first_name')))
 
@@ -61,11 +61,16 @@ def get_command_parameters(text:str) -> list:
     parameters = text.split()
     return parameters[1::]
 
+def scheduled_message():
+    print('Send scheduled message')
+    bot.sendMessage(os.getenv('MY_CHAT_ID'), 'Hi, this is a scheduled message')
 
+schedule.every(5).minutes.do(scheduled_message)
 
 # Starting message loop
 MessageLoop(bot, on_chat_message).run_as_thread()
 print ('Listening ...')
 last_update_id = None
 while 1:
+    schedule.run_pending()
     time.sleep(10)
