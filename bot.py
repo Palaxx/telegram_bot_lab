@@ -1,7 +1,7 @@
 import os
 import telepot
 import schedule
-import request
+import requests
 
 from telepot import Bot
 from telepot.loop import MessageLoop
@@ -18,9 +18,24 @@ bot = Bot(TOKEN)
 print(bot.getMe())
 
 registrations = {}
-def get_price(crypto:str) -> float:
-    request
-    pass
+def get_price(crypto: str) -> float:
+    url = os.getenv('API_BASE_URL') + 'quotes/latest'
+
+    response = requests.get(url, headers = {
+        'Accepts': 'application/json',
+        'X-CMC_PRO_API_KEY': os.getenv('API_KEY'),
+    }, params={'symbol': crypto})
+
+    response.raise_for_status()
+
+    data = response.json().get('data')
+    value = data.get(crypto)\
+        .get('quote')\
+        .get('USD')\
+        .get('price')
+
+
+    return float(value)
 # Handle message received
 def on_chat_message(msg):
     text = msg.get('text')
@@ -36,7 +51,11 @@ def on_chat_message(msg):
         ])
         bot.sendMessage(chat_id, 'In which cryptocurrency you want to be notified?', reply_markup=keyboard)
     elif '/getprice' in text:
-        value = get_price(parameters[0])
+        if len(parameters) == 0:
+            bot.sendMessage(chat_id, 'You must pass a crypto symbol. Ex: BTC|ETH')
+        else:
+            value = get_price(parameters[0].upper())
+            bot.sendMessage(chat_id, 'The value of {} in USD is {}'.format(parameters[0].upper(), value))
     elif text.startswith('/'):
         bot.sendMessage(chat_id, "I'm sorry {} can't understand!".format(msg.get('from').get('first_name')))
 
@@ -56,8 +75,8 @@ def get_command_parameters(text:str) -> list:
 def scheduled_message():
     print('Send scheduled message')
     for chat_id, crypto in registrations.items():
-        print(chat_id, crypto)
-    # bot.sendMessage(os.getenv('MY_CHAT_ID'), 'Hi, this is a scheduled message')
+        value = get_price(crypto.upper())
+        bot.sendMessage(chat_id, 'The value of {} in USD is {}'.format(crypto.upper(), value))
 
 schedule.every(1).minutes.do(scheduled_message)
 
