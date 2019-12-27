@@ -20,9 +20,9 @@ def on_chat_message(msg):
 
     parameters = get_command_parameters(text)
     content_type, chat_type, chat_id = telepot.glance(msg)
-    if '/greetings' in text:
+    if text.startswith('/greetings'):
         bot.sendMessage(chat_id, "Hi {}, nice to meet you!".format(msg.get('from').get('first_name')))
-    elif '/sayhelloto' in text:
+    elif text.startswith('/sayhelloto'):
         name = '' if len(parameters) == 0 else parameters[0]
         bot.sendMessage(chat_id, "Hi {}, nice to meet you!".format(name))
     elif text.startswith('/'):
