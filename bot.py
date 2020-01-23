@@ -15,6 +15,7 @@ bot = Bot(TOKEN)
 print(bot.getMe())
 game_name = os.environ['GAME_NAME']
 
+
 # Handle message received
 def on_chat_message(msg):
     text = msg.get('text')
@@ -27,23 +28,21 @@ def on_chat_message(msg):
 
 def on_callback_query(msg):
     query_id = msg.get('id')
-    print(msg)
     if msg.get('game_short_name') != game_name:
         bot.answerCallbackQuery(query_id, text='Sorry {} is not an available game'.format(msg.get('game_short_name')))
     else:
         from_id = msg.get('from').get('id')
         chat_id = msg.get('message').get('chat').get('id')
         message_id = msg.get('message').get('message_id')
-        game_url = os.environ['GAME_URL'] + "?from_id={}&chat_id={}&message_id={}".format(from_id,chat_id ,message_id )
-        print(game_url)
+        # Send info on query string, these ids is required to save the highscore.
+        game_url = os.environ['GAME_URL'] + "?from_id={}&chat_id={}&message_id={}".format(from_id, chat_id, message_id)
         bot.answerCallbackQuery(query_id, url=game_url)
-    # bot.answerCallbackQuery(query_id, text='Got it! {} choice saved'.format(query_data))
 
 
 # Starting message loop
 MessageLoop(bot, {
-    'chat' : on_chat_message,
-    'callback_query' : on_callback_query
+    'chat': on_chat_message,
+    'callback_query': on_callback_query
 }).run_as_thread()
 print('Listening ...')
 last_update_id = None
