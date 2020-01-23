@@ -3,8 +3,16 @@ async-timeout==3.0.1
 attrs==19.3.0
 certifi==2019.11.28
 chardet==3.0.4
+Click==7.0
+Flask==1.1.1
+Flask-Cors==3.0.8
+Frozen-Flask==0.15
 get==2019.4.13
+gunicorn==20.0.4
 idna==2.8
+itsdangerous==1.1.0
+Jinja2==2.10.3
+MarkupSafe==1.1.1
 multidict==4.7.1
 post==2019.4.13
 public==2019.4.13
@@ -13,6 +21,8 @@ query-string==2019.4.13
 request==2019.4.13
 requests==2.22.0
 schedule==0.6.0
+six==1.14.0
 telepot==12.7
 urllib3==1.25.7
+Werkzeug==0.16.0
 yarl==1.4.2
