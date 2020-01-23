@@ -64,3 +64,11 @@ git checkout level5
 **Topics:**
 
 Build a working bot to retrieve every X minutes the value of a selected cryptocurrency
+
+## Level 6
+```bash
+git checkout level6
+```
+**Topics:**
+
+Add an html game on your bot. 
