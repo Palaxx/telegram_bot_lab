@@ -14,7 +14,7 @@ bot = Bot(TOKEN)
 
 app = Flask(__name__)
 
-# This allow cors on all routes for all origin and methods. This should not be done in a production enviroment
+# This allow cors on all routes for all origin and methods. This should not be done in a production environment
 CORS(app)
 
 
